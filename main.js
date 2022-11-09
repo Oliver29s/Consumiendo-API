@@ -1,11 +1,12 @@
 let arrayCarrito = [];
 let total = 0;
 let contenedor = document.querySelector(".shop-items");
+let textoTotal = document.querySelector(".cart-total-price")
 
 let apisRest = await fetch("https://api.escuelajs.co/api/v1/products");
 let rest = await apisRest.json();
 let productos = rest.slice(0, 8);
-console.log(productos)
+
 
 productos.forEach((element) => {
   contenedor.innerHTML += `
@@ -21,16 +22,19 @@ productos.forEach((element) => {
     
     `;
 });
+
+
 let boton = document.querySelectorAll(".shop-item-button");
 let carrito = document.querySelector(".cart-items");
 boton = [...boton];
+
+
 boton.forEach((btn) => {
   btn.addEventListener("click", (item) => {
     let acutalID = parseInt(item.target.parentNode.parentNode.id)
-   
     let actualProducto = productos.find(item=> item.id == acutalID)
     actualProducto.cantidad = 1
-    console.log(actualProducto)
+    arrayCarrito.push(actualProducto)
     carrito.innerHTML += `
         <div class="cart-row">
                     <div class="cart-item cart-column">
@@ -44,9 +48,15 @@ boton.forEach((btn) => {
                     </div>
         
         `;
+        getTotal()
   });
+  
 });
 function getTotal(){
-  let sumaTotal;
-  carrito.innerHTML
+  let sumTotal;
+  let total = arrayCarrito.reduce((sum ,item)=>{
+    sumTotal = sum + item.cantidad*item.price
+   return sumTotal
+  },0)
+  textoTotal.innerText= `$${total}`
 }
