@@ -67,7 +67,8 @@ imprimirCartas();
 
 function dibujarItem() {
   let html = " ";
-  arrayCarrito.forEach(({images,title,price,cantidad}) => {
+  let newObj = Object.values(arrayCarrito)
+  newObj.forEach(({images,title,price,cantidad}) => {
     html += `
      <div class="cart-row">
                  <div class="cart-item cart-column">
@@ -84,14 +85,29 @@ function dibujarItem() {
     carrito.innerHTML = html;
   });
 }
+// creamos funcion para encontrar el id para pintarlo en coleccio-carrito de compras la guardamos en un variable dentro del evento //
+function buscarID(totalId) {
+  return productos.find(function(producto){
+    return producto.id === totalId
+    
+  })
+}
+// funcion para buscar id arriba de esto//
+
 
 contenedor.addEventListener('click',function(e){
   if(e.target.classList.contains('shop-item-button')){
        let totalId= Number(e.target.parentElement.parentElement.id);
-       productos.find(function(producto){
-          console.log( producto.id === totalId)
-       })
+       let findProductos = buscarID(totalId)
+        // preguntamos si en nuestro objeto (que hemos creado en la parte de arriba de todo) existe la propiedad que estamos buscando, si no que la creé copiaando los elementos de la variable donde guardamos la funcion de buscar id //
+       if(arrayCarrito[findProductos.id]){
+        arrayCarrito[findProductos.id].cantidad++
+       }else{
+        arrayCarrito[findProductos.id] = {
+          ...findProductos,
+          cantidad:1}
+       } 
 
-  }
+  }dibujarItem()
 })
 
