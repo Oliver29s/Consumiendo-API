@@ -1,6 +1,6 @@
 let contenedor = document.querySelector(".shop-items");
 let textoTotal = document.querySelector(".cart-total-price");
-let contenedorCarta = document.querySelector(".shop-item")
+let boton = document.querySelector(".cart-column")
 let carrito = document.querySelector(".cart-items");
 let arrayCarrito = {};
 let total = 0;
@@ -68,17 +68,17 @@ imprimirCartas();
 function dibujarItem() {
   let html = " ";
   let newObj = Object.values(arrayCarrito)
-  newObj.forEach(({images,title,price,cantidad}) => {
+  newObj.forEach(({images,title,price,cantidad,id}) => {
     html += `
      <div class="cart-row">
-                 <div class="cart-item cart-column">
+                 <div class="cart-item cart-column" >
                      <img class="cart-item-image" src="${images}" width="100" height="100">
                      <span class="cart-item-title">${title}</span>
                  </div>
                  <span class="cart-price cart-column">$${price * cantidad}</span>
                  <div class="cart-quantity cart-column">
                       <input class="cart-quantity-input" min="1" type="numbers" value="${cantidad}">
-                      <button class="btn btn-danger" type="button">REMOVE</button>
+                      <button class="btn btn-danger "  id="${id}" type="button">REMOVE</button>
                  </div> 
                   
       </div>`;
@@ -95,19 +95,29 @@ function buscarID(totalId) {
 // funcion para buscar id arriba de esto//
 
 
+
 contenedor.addEventListener('click',function(e){
   if(e.target.classList.contains('shop-item-button')){
        let totalId= Number(e.target.parentElement.parentElement.id);
        let findProductos = buscarID(totalId)
-        // preguntamos si en nuestro objeto (que hemos creado en la parte de arriba de todo) existe la propiedad que estamos buscando, si no que la creé copiaando los elementos de la variable donde guardamos la funcion de buscar id //
+        // preguntamos si en nuestro objeto (que hemos creado en la parte de arriba de todo) existe la propiedad que estamos buscando, si no que la creé copiaando los elementos de la variable donde guardamos la funcion de buscar id + .id //
        if(arrayCarrito[findProductos.id]){
+        // cada vez que esto coincida cantidad aumentara en 1 //
         arrayCarrito[findProductos.id].cantidad++
+       
        }else{
         arrayCarrito[findProductos.id] = {
           ...findProductos,
+          // copiamos los elemntos de al nuevo carrito que si su id tendra de value el objeto que conincida con su id //
+          // creamos la propiedad cantidad //
           cantidad:1}
-       } 
+       }  
 
   }dibujarItem()
 })
 
+boton.addEventListener('click',function(e){
+  
+      console.log('click');
+    
+})
